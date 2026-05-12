@@ -1,16 +1,36 @@
 /**
  * @file compressor.c
- * @brief Program to compress files
+ * @brief Command-line interface for Huffman compression and decompression.
  *
- * This program compresses files using different compression algorithms
+ * This file implements the main entry point of the compressor program.
+ * It is responsible for parsing command-line arguments, validating user input,
+ * and invoking the appropriate compression or decompression routines.
+ *
+ * Supported operations:
+ *   - Compression of input files using Huffman coding (-c)
+ *   - Decompression of previously compressed files (-d)
+ *
+ * Usage:
+ *   ./compressor (-c | -d) <input-file> [output-file]
  *
  * @author Ryan Ferrer
+ * @date 2026-05-12
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "../include/huffman.h"
+
+/**
+ * Prints usage instructions to stderr
+ *
+ * Usage format displayed:
+ *   ./prg_name (-c | -d) <input-file> [output-file]
+ *
+ * @param prg_name Name of the program
+ */
 void print_usage(const char* prg_name) {
     fprintf(stderr,
             "Usage:\n"
@@ -22,6 +42,27 @@ void print_usage(const char* prg_name) {
         );
 }
 
+/**
+ * @brief Entry point for the compressor program.
+ *
+ * This function is responsible for parsing command-line arguments, validating
+ * user input, and dispatching execution to either the compression or
+ * decompression pipeline.
+ *
+ * Supported modes:
+ *   - Compression (-c): Compresses the input file using Huffman coding
+ *   - Decompression (-d): Restores a previously compressed file
+ *
+ * Note:
+ *   This function does not implement compression logic directly.
+ *   It delegates core functionality to the Huffman module.
+ *
+ * @param argc Argument count
+ * @param argv Argument vector
+ *
+ * @return EXIT_SUCCESS on successful execution,
+ *         EXIT_FAILURE on invalid input or error conditions
+ */
 int main(int argc, char* argv[]) {
 
     int compress_mode = 0;
