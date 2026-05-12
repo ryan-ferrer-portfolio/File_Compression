@@ -19,7 +19,8 @@ void print_usage(const char* prg_name) {
             "  -c    Compress input file\n"
             "  -d    Decompress input file\n",
             prg_name
-        );}
+        );
+}
 
 int main(int argc, char* argv[]) {
 
@@ -53,7 +54,7 @@ int main(int argc, char* argv[]) {
         print_usage(argv[0]);
         return EXIT_FAILURE;
     }
-    char* input_file = argv[optind++];
+    const char* input_file = argv[optind++];
 
     // check for output file
     char* output_file = NULL;
@@ -66,6 +67,25 @@ int main(int argc, char* argv[]) {
         print_usage(argv[0]);
         return EXIT_FAILURE;
     }
+
+    // Open input file
+    FILE* input_fp = fopen(input_file, "rb");
+    if(input_fp == NULL) {
+        perror("fopen");
+        return EXIT_FAILURE;
+    }
+
+    // FILE* output_fp;
+    // if(output_file) {
+    //     output_fp = fopen(output_file, "wb");
+    //     if(output_fp == NULL) {
+    //         perror("fopen");
+    //         fclose(input_fp);
+    //         return EXIT_FAILURE;
+    //     }
+    // }
+
+
 
 
 
