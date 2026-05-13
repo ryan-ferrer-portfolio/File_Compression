@@ -23,6 +23,8 @@
 
 #include "../include/huffman.h"
 
+#define HUFF_EXTENSION ".huff" ///< File extension for Huffman compressed files
+
 /**
  * Prints usage instructions to stderr
  *
@@ -97,9 +99,14 @@ int main(int argc, char* argv[]) {
     }
     char* input_file_name = argv[optind++];
 
-    // check for output file, use default name if none specified
-    char* output_file_name = NULL/* TODO */;
-    if(optind < argc) {
+    // Set default output file
+    size_t output_name_size = strlen(input_file_name) + strlen(HUFF_EXTENSION) + 1;
+    char default_output_name[output_name_size];
+    char *output_file_name = default_output_name;
+    snprintf(default_output_name, output_name_size,
+             "%s%s", input_file_name, HUFF_EXTENSION);
+    // use specified name if there
+    if (optind < argc) {
         output_file_name = argv[optind++];
     }
 
@@ -124,7 +131,8 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    int status;
+    // Compress using huffman module
+    int status = EXIT_FAILURE;
     if(compress_mode) {
         status = huffman_compress_file(input_fp, output_fp);
     }
