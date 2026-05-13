@@ -95,12 +95,12 @@ int main(int argc, char* argv[]) {
         print_usage(argv[0]);
         return EXIT_FAILURE;
     }
-    const char* input_file = argv[optind++];
+    char* input_file_name = argv[optind++];
 
-    // check for output file
-    char* output_file = NULL;
+    // check for output file, use default name if none specified
+    char* output_file_name = NULL/* TODO */;
     if(optind < argc) {
-        output_file = argv[optind++];
+        output_file_name = argv[optind++];
     }
 
     // reject extra args
@@ -110,25 +110,27 @@ int main(int argc, char* argv[]) {
     }
 
     // Open input file
-    FILE* input_fp = fopen(input_file, "rb");
+    FILE* input_fp = fopen(input_file_name, "rb");
     if(input_fp == NULL) {
         perror("fopen");
         return EXIT_FAILURE;
     }
 
-    // FILE* output_fp;
-    // if(output_file) {
-    //     output_fp = fopen(output_file, "wb");
-    //     if(output_fp == NULL) {
-    //         perror("fopen");
-    //         fclose(input_fp);
-    //         return EXIT_FAILURE;
-    //     }
-    // }
+    // Open output file
+    FILE* output_fp = fopen(output_file_name, "wb");
+    if(output_fp == NULL) {
+        fclose(input_fp);
+        perror("fopen");
+        return EXIT_FAILURE;
+    }
 
+    int status;
+    if(compress_mode) {
+        status = huffman_compress_file(input_fp, output_fp);
+    }
+    if(decompress_mode) {
+        status = huffman_decompress_file(input_fp, output_fp);
+    }
 
-
-
-
-    return EXIT_SUCCESS;
+    return status;
 }
