@@ -148,7 +148,7 @@ int main(int argc, char* argv[]) {
     }
     char* input_file_name = argv[optind++];
 
-    // Set default output file
+    // Set output file name
     size_t output_name_size = strlen(input_file_name) + strlen(HUFF_EXTENSION) + 1;
     char default_output_name[output_name_size];
     char* output_file_name = default_output_name;
