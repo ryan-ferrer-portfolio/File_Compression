@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "../include/huffman.h"
 
@@ -33,7 +34,7 @@
  *
  * @param prg_name Name of the program
  */
-void print_usage(const char* prg_name) {
+static void print_usage(const char* prg_name) {
     fprintf(stderr,
             "Usage:\n"
             "  %s (-c | -d) <input-file> [output-file]\n\n"
@@ -42,6 +43,54 @@ void print_usage(const char* prg_name) {
             "  -d    Decompress input file\n",
             prg_name
         );
+}
+
+/**
+ * @brief Generates the default output filename for compression or decompression.
+ *
+ * This function constructs an appropriate output filename based on the input file
+ * and the current operation mode.
+ *
+ * Behavior:
+ *   - Compression mode:
+ *       Appends the Huffman extension (".huff") to the input filename.
+ *
+ *   - Decompression mode:
+ *       If the input filename ends with the Huffman extension, it is removed.
+ *       Otherwise, a default ".out" extension is appended.
+ *
+ * The result is written into a caller-provided buffer. The caller is responsible
+ * for allocating the buffer and ensuring it has sufficient size.
+ *
+ * @param input_file   Path to the input file.
+ * @param compress_mode Non-zero for compression, zero for decompression.
+ * @param out          Buffer where the generated filename will be written.
+ * @param out_size     Size of the output buffer in bytes.
+ *
+ * @note The output is always null-terminated if out_size > 0.
+ */
+void get_output_filename(const char *input_file, int compress_mode,
+                         char *out, size_t out_size)
+{
+    size_t len = strlen(input_file);
+    size_t ext_len = strlen(HUFF_EXTENSION);
+
+    if (compress_mode) {
+        snprintf(out, out_size, "%s%s", input_file, HUFF_EXTENSION);
+        return;
+    }
+
+    // decompress mode
+    if (len >= ext_len &&
+        strcmp(input_file + len - ext_len, HUFF_EXTENSION) == 0)
+    {
+        snprintf(out, out_size, "%.*s",
+                 (int)(len - ext_len),
+                 input_file);
+    }
+    else {
+        snprintf(out, out_size, "%s.out", input_file);
+    }
 }
 
 /**
