@@ -69,8 +69,8 @@ static void print_usage(const char* prg_name) {
  *
  * @note The output is always null-terminated if out_size > 0.
  */
-void get_output_filename(const char *input_file, int compress_mode,
-                         char *out, size_t out_size)
+void get_output_filename(const char* input_file, int compress_mode,
+                         char* out, size_t out_size)
 {
     size_t len = strlen(input_file);
     size_t ext_len = strlen(HUFF_EXTENSION);
@@ -151,13 +151,9 @@ int main(int argc, char* argv[]) {
     // Set default output file
     size_t output_name_size = strlen(input_file_name) + strlen(HUFF_EXTENSION) + 1;
     char default_output_name[output_name_size];
-    char *output_file_name = default_output_name;
-    snprintf(default_output_name, output_name_size,
-             "%s%s", input_file_name, HUFF_EXTENSION);
-    // use specified name if there
-    if (optind < argc) {
-        output_file_name = argv[optind++];
-    }
+    char* output_file_name = default_output_name;
+
+    get_output_filename(input_file_name, compress_mode, output_file_name, output_name_size);
 
     // reject extra args
     if(optind < argc) {
