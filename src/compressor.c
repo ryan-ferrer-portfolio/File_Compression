@@ -140,5 +140,7 @@ int main(int argc, char* argv[]) {
         status = huffman_decompress_file(input_fp, output_fp);
     }
 
+    fclose(input_fp);
+    fclose(output_fp);
     return status;
 }
