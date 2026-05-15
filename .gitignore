@@ -1,0 +1,15 @@
+# CLion / CMake build directories
+cmake-build-*/
+
+# JetBrains IDE settings
+.idea/
+
+# Generic build artifacts
+build/
+
+# Compiled object files
+*.o
+
+# Executables
+*.exe
+compressor
